@@ -1,0 +1,114 @@
+/* jQ plugin announcement v0.1 by zzbaivong (http://devs.forumvi.com) */
+#zzAnnouncement {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: 300px;
+    padding: 5px 20px;
+    font-family: monospace;
+    z-index: 888;
+    border-left: 1px solid #DDD;
+    border-top: 1px solid #DDD;
+}
+#zzAnnouncement, .zzAnnouncement-list > li {
+    background: #333;
+    color: #FFF;
+}    
+.zzAnnouncement-title {
+    height: 26px;
+    line-height: 30px;
+}
+.zzAnnouncement-title > h2 {
+    font-size: 22px;
+    font-weight: 300;
+    text-transform: uppercase;
+    color: yellow;
+    padding-left: 30px;
+    background: url(http://i.imgur.com/n3kolMS.png) no-repeat 0 center transparent;
+}
+.zzAnnouncement-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.zzAnnouncement-button > div {
+    width: 30px;
+    height: 30px;
+    text-indent: -9999px;
+    background: none no-repeat center center #2559FD;
+    float: right;
+    margin: 3px 3px 3px 0;
+}
+.zzAnnouncement-button > div.zzAnnouncement-toggle {
+    background-image: url(http://i.imgur.com/1bDKWJT.png);
+}
+.zzAnnouncement-button > div.zzAnnouncement-close {
+    background-color: #FF3737;
+}
+.zzAnnouncement-button > div:hover {
+    cursor: pointer;
+    background-color: #666;
+    -webkit-transition: background 300ms;
+            transition: background 300ms;
+}
+.zzAnnouncement-content {
+    margin: 18px 0 10px;
+    overflow: hidden;
+}
+.zzAnnouncement-list {
+    position: relative;
+    overflow: hidden;
+}
+.zzAnnouncement-list > li {
+    width: 100%;
+    list-style: none;
+    position: relative;
+    -webkit-transition: all 300ms;
+            transition: all 300ms;
+}
+.zzAnnouncement-list > li.show {
+    z-index: 10;
+}
+.zzAnnouncement-list.zztop > li {
+    left: 0;
+    top: -100%;
+}
+.zzAnnouncement-list.zztop > li.show {
+    top: 0;
+}
+.zzAnnouncement-list.zzbottom > li {
+    left: 0;
+    bottom: -100%;
+}
+.zzAnnouncement-list.zzbottom > li.show {
+    bottom: 0;
+}
+.zzAnnouncement-list.zzleft > li {
+    top: 0;
+    left: -100%;
+}
+.zzAnnouncement-list.zzleft > li.show {
+    left: 0;
+}
+.zzAnnouncement-list.zzright > li {
+    top: 0;
+    right: -100%;
+}
+.zzAnnouncement-list.zzright > li.show {
+    right: 0;
+}
+.zzAnnouncement-paging {
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    margin-top: 15px;
+}
+.zzAnnouncement-paging > span {
+    padding: 2px 5px;
+    margin: 0 3px;
+    background: #666;
+    cursor: pointer;
+}
+.zzAnnouncement-paging > span:hover, .zzAnnouncement-paging > span.active {
+    background: #C03AFF;
+}
