@@ -1,6 +1,6 @@
 # jQuery plugin Announcement
 
-This plugin adds a fixed board at the bottom of your browser screen to show announcements.
+This plugin adds a fixed board at the bottom of your browser screen to display announcements.
 
 ## Demo
 

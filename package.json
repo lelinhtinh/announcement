@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "This plugin adds a fixed board at the bottom of your browser screen to display announcements.",
   "keywords": [
+    "ecosystem:jquery",
     "jquery-plugin",
     "jquery",
     "plugins",
