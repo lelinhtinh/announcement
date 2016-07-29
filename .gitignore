@@ -3,6 +3,8 @@ Thumbs.db
 ehthumbs.db
 
 # Folder config file
+bower_components
+node_modules
 Desktop.ini
 
 # Recycle Bin used on file shares
@@ -26,7 +28,7 @@ $RECYCLE.BIN/
 .LSOverride
 
 # Icon must ends with two \r.
-Icon
+Icon
 
 # Thumbnails
 ._*
