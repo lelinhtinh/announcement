@@ -1,12 +1,11 @@
 /*!
- *  jQuery plugin announcement - v1.0.0
- *  This plugin adds a fixed board at the bottom of your browser screen to display announcements.
- *  https://github.com/baivong/announcement
- *
- *  Made by Zzbaivong
- *  Under MIT License
- */
-(function($, window, document, undefined) {
+*  jquery.announcement - v1.0.1
+*  This plugin adds a fixed board at the bottom of your browser screen to display announcements.
+*  https://github.com/baivong/announcement
+*
+*  Made by Zzbaivong
+*  Under MIT License
+*/(function($, window, document, undefined) {
 
     'use strict';
 

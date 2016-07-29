@@ -1,5 +1,5 @@
 {
-  "name": "announcement",
+  "name": "jquery.announcement",
   "description": "This plugin adds a fixed board at the bottom of your browser screen to display announcements.",
   "main": "dist/jquery.announcement.js",
   "authors": [

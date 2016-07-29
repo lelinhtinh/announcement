@@ -7,21 +7,23 @@ module.exports = function(grunt) {
 
         // Banner definitions
         meta: {
-            banner: '/*!\n' +
-                ' *  jQuery plugin <%= pkg.title || pkg.name %> - v<%= pkg.version %>\n' +
-                ' *  <%= pkg.description %>\n' +
-                ' *  <%= pkg.homepage %>\n' +
-                ' *\n' +
-                ' *  Made by <%= pkg.author.name %>\n' +
-                ' *  Under <%= pkg.license %> License\n' +
-                ' */\n'
+            banner: [
+                '/*!',
+                '*  <%= pkg.name %> - v<%= pkg.version %>',
+                '*  <%= pkg.description %>',
+                '*  <%= pkg.homepage %>',
+                '*',
+                '*  Made by <%= pkg.author.name %>',
+                '*  Under <%= pkg.license %> License',
+                '*/'
+            ].join('\n')
         },
 
         // Concat definitions
         concat: {
             dist: {
-                src: ['src/jquery.announcement.js'],
-                dest: 'dist/jquery.announcement.js'
+                src: ['src/<%= pkg.name %>.js'],
+                dest: 'dist/<%= pkg.name %>.js'
             },
             options: {
                 banner: '<%= meta.banner %>'
@@ -30,14 +32,14 @@ module.exports = function(grunt) {
 
         // Lint definitions
         jshint: {
-            files: ['src/jquery.announcement.js', 'test/**/*', 'demo/script.js'],
+            files: ['src/<%= pkg.name %>.js', 'test/**/*', 'demo/script.js'],
             options: {
                 jshintrc: '.jshintrc'
             }
         },
 
         eslint: {
-            target: ['src/jquery.announcement.js', 'test/**/*', 'demo/script.js'],
+            target: ['src/<%= pkg.name %>.js', 'test/**/*', 'demo/script.js'],
             options: {
                 configFile: '.eslintrc.json'
             }
@@ -46,8 +48,8 @@ module.exports = function(grunt) {
         // Minify definitions
         uglify: {
             dist: {
-                src: ['dist/jquery.announcement.js'],
-                dest: 'dist/jquery.announcement.min.js'
+                src: ['dist/<%= pkg.name %>.js'],
+                dest: 'dist/<%= pkg.name %>.min.js'
             },
             options: {
                 banner: '<%= meta.banner %>'
@@ -57,8 +59,8 @@ module.exports = function(grunt) {
         // Less definitions
         less: {
             dist: {
-                src: ['src/jquery.announcement.less'],
-                dest: 'dist/jquery.announcement.css'
+                src: ['src/<%= pkg.name %>.less'],
+                dest: 'dist/<%= pkg.name %>.css'
             },
             options: {
                 plugins: [
