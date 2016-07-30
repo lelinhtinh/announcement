@@ -55,6 +55,8 @@
                 title: 'Announcement',
                 showToggle: true,
                 showClose: false,
+                autoHide: 'auto',
+                autoClose: 0,
                 position: 'bottom-right',
                 width: 300,
                 height: 'auto',
@@ -79,8 +81,8 @@
         var instance = $fixture.data('plugin_announcement'),
             index = 1;
 
-        instance.show(index);
-        assert.equal(instance.active, index);
+        instance.active(index);
+        assert.equal(instance.current, index);
     });
 
 }(jQuery, QUnit));
