@@ -9,25 +9,22 @@ module.exports = function(config) {
       'demo/*.js'
     ],
     preprocessors: {
-      'src/*.js': ['jshint', 'eslint'],
-      'test/setup.js': ['jshint', 'eslint'],
-      'test/spec/*.js': ['jshint', 'eslint'],
-      'demo/*.js': ['jshint', 'eslint']
-    },
-    jshintPreprocessor: {
-      jshintrc: '.jshintrc'
+      'src/*.js': ['eslint'],
+      'test/**/*.js': ['eslint'],
+      'demo/*.js': ['eslint']
     },
     eslint: {
-      showWarnings: true,
       engine: {
         configFile: '.eslintrc.json'
-      }
+      },
+      showWarnings: true,
+      stopOnError: false
     },
     reporters: ['progress'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    autoWatch: true,
+    autoWatch: false,
     browsers: ['PhantomJS', 'Firefox'],
     singleRun: false,
     concurrency: Infinity

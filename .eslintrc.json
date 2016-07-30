@@ -2,7 +2,8 @@
     "env": {
         "browser": true,
         "jquery": true,
-        "qunit": true
+        "qunit": true,
+        "node": true
     },
     "extends": "eslint:recommended",
     "rules": {

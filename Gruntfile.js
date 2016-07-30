@@ -15,7 +15,8 @@ module.exports = function(grunt) {
                 '*',
                 '*  Made by <%= pkg.author.name %>',
                 '*  Under <%= pkg.license %> License',
-                '*/'
+                '*/',
+                '\n'
             ].join('\n')
         },
 
@@ -31,13 +32,6 @@ module.exports = function(grunt) {
         },
 
         // Lint definitions
-        jshint: {
-            files: ['src/<%= pkg.name %>.js', 'test/**/*', 'demo/script.js'],
-            options: {
-                jshintrc: '.jshintrc'
-            }
-        },
-
         eslint: {
             target: ['src/<%= pkg.name %>.js', 'test/**/*', 'demo/script.js'],
             options: {
@@ -77,8 +71,7 @@ module.exports = function(grunt) {
             unit: {
                 configFile: 'karma.conf.js',
                 background: true,
-                singleRun: false,
-                browsers: ['PhantomJS', 'Firefox']
+                autoWatch: true
             },
 
             //continuous integration mode: run tests once in PhantomJS browser.
@@ -93,22 +86,57 @@ module.exports = function(grunt) {
         // Better than calling grunt a million times
         // (call 'grunt watch')
         watch: {
-            files: ['src/*', 'test/**/*'],
-            tasks: ['default']
+            header: {
+                files: ['package.json'],
+                tasks: ['build']
+            },
+
+            scripts: {
+                files: ['src/<%= pkg.name %>.js'],
+                tasks: ['concat', 'uglify']
+            },
+
+            styles: {
+                files: ['src/<%= pkg.name %>.less'],
+                tasks: ['less']
+            },
+
+            karma: {
+                files: ['src/*', 'test/**/*'],
+                tasks: ['karma:unit:run']
+            }
+        },
+
+        // http://localhost:3000/demo/
+        browserSync: {
+            bsFiles: {
+                src: [
+                    'dist/*',
+                    'demo/*.css',
+                    'demo/*.js',
+                    'demo/index.html',
+                ]
+            },
+            options: {
+                server: {
+                    baseDir: './'
+                },
+                watchTask: true,
+                startPath: '/demo'
+            }
         }
 
     });
 
     grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-eslint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-browser-sync');
 
-    grunt.registerTask('lint', ['jshint', 'eslint']);
     grunt.registerTask('build', ['concat', 'uglify', 'less']);
-    grunt.registerTask('travis', ['lint', 'karma:travis']);
-    grunt.registerTask('default', ['lint', 'build', 'karma:unit:run']);
+    grunt.registerTask('travis', ['karma:travis']);
+    grunt.registerTask('default', ['browserSync', 'karma:unit:start', 'watch']);
 };
