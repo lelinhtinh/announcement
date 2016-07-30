@@ -1,11 +1,13 @@
 /*!
-*  jquery.announcement - v1.0.1
-*  This plugin adds a fixed board at the bottom of your browser screen to display announcements.
+*  jquery.announcement - v1.2.0
+*  Adds a fixed board at the bottom of your browser screen to display announcements.
 *  https://github.com/baivong/announcement
 *
 *  Made by Zzbaivong
 *  Under MIT License
-*/(function($, window, document, undefined) {
+*/
+
+(function($, window, document, undefined) {
 
     'use strict';
 
@@ -16,6 +18,9 @@
 
             showToggle: true, // Boolean
             showClose: false, // Boolean
+
+            autoHide: 'auto', // Number [s] (0: disable, 'auto': when finished slideshow)
+            autoClose: 0, // Number [s] (0: disable, 'auto': when finished slideshow)
 
             position: 'bottom-right', // 'bottom-right' | 'bottom-left'
 
@@ -43,12 +48,15 @@
         this.settings = $.extend({}, defaults, options);
         this._defaults = defaults;
         this._name = pluginName;
+
         this.nodes = {};
         this.size = 0;
-        this.active = 0;
+        this.current = 0;
+        this.count = 0;
         this.run = undefined;
+
         this.build();
-        this.init();
+        if (this.size > 0) this.init();
     }
 
     $.extend(Plugin.prototype, {
@@ -132,16 +140,16 @@
             if (set.showToggle && set.showClose) $title.addClass('two-button');
             if (set.title !== '') $title.text(set.title);
 
+            if (set.width === 'auto') set.width = $list.width();
+            $list.add($items).width(set.width);
+            $wrap.width($wrap.width());
+
             if (this.size === 1) {
                 max = $items.eq(0).height();
             } else {
 
                 $paging = this.genNode('paging');
                 $content.append($paging);
-
-                if (set.width !== 'auto' && $.type(set.width) === 'number') $list.add($items).width(set.width);
-                $list.add($items).width($list.width());
-                $wrap.width($wrap.width());
 
                 $items.each(function(index, value) {
                     var $num = $('<span>', {
@@ -186,29 +194,44 @@
                 numbers: $numbers
             };
         },
-        show: function(index) {
-            var $announce = this.nodes;
+        active: function(index) {
+            var $announce = this.nodes,
+                set = this.settings;
 
-            if (this.settings.effect === 'shuffle') $announce.list.addClass(this.randomEffect(true));
+            if (set.effect === 'shuffle') $announce.list.addClass(this.randomEffect(true));
 
             $announce.content.find('.active').removeClass('active');
             $announce.items.eq(index).addClass('active');
-            $announce.numbers.eq(index).addClass('active');
+            if (this.size > 1) $announce.numbers.eq(index).addClass('active');
 
-            this.active = index;
+            this.current = index;
+            this.count++;
+
+            if (this.count > this.size) {
+                if (set.autoHide === 'auto' && set.showToggle) {
+                    this.minmax();
+                    set.autoHide = 0;
+                }
+
+                if (set.autoClose === 'auto') {
+                    this.destroy();
+                    set.autoClose = 0;
+                }
+            }
         },
         play: function() {
             var _this = this,
-                set = _this.settings;
+                set = _this.settings,
+                $announce = _this.nodes;
 
-            if (set.speed === 0 || _this.nodes.wrap.hasClass('hidden')) return;
+            if (set.speed === 0 || set.size === 1 || $announce.wrap.hasClass('hidden')) return;
 
-            _this.active++;
-            if (_this.active >= _this.size) _this.active = 0;
+            _this.current++;
+            if (_this.current >= _this.size) _this.current = 0;
 
             clearTimeout(_this.run);
             _this.run = setTimeout(function() {
-                _this.show(_this.active);
+                _this.active(_this.current);
                 _this.play();
             }, (set.speed * 1000));
         },
@@ -216,40 +239,56 @@
             if (this.run) {
                 clearTimeout(this.run);
                 this.run = undefined;
-                this.active--;
+                this.current--;
             }
+        },
+        minmax: function() {
+            var _this = this,
+                $wrap = this.nodes.wrap;
+
+            if (!$wrap.length) return;
+
+            _this.nodes.content.slideToggle('slow', function() {
+                if ($wrap.hasClass('hidden')) {
+                    $wrap.removeClass('hidden');
+                    _this.play();
+                    _this.setCookie('jquery.announcement', 'hidden', -1);
+                } else {
+                    $wrap.addClass('hidden');
+                    _this.stop();
+                    _this.setCookie('jquery.announcement', 'hidden', 1);
+                }
+            });
+        },
+        destroy: function() {
+            var $wrap = this.nodes.wrap;
+
+            if (!$wrap.length) return;
+
+            this.stop();
+            $wrap.fadeOut('slow', function() {
+                $wrap.remove();
+            });
+            this.setCookie('jquery.announcement', 'remove', 1);
         },
         init: function() {
             var _this = this,
                 set = _this.settings,
                 $announce = _this.nodes;
 
-            _this.show(0);
+            _this.active(0);
             _this.play();
 
             if (_this.size > 1) $announce.numbers.on('click', function() {
                 var index = $(this).data('index');
-                if (index !== _this.active) _this.show(index);
+                if (index !== _this.current) _this.active(index);
             });
 
             if (set.showToggle) $announce.toggle.on('click', function() {
-                $announce.content.slideToggle('slow', function() {
-                    if ($announce.wrap.hasClass('hidden')) {
-                        $announce.wrap.removeClass('hidden');
-                        _this.play();
-                        _this.setCookie('jquery.announcement', 'hidden', -1);
-                    } else {
-                        $announce.wrap.addClass('hidden');
-                        _this.stop();
-                        _this.setCookie('jquery.announcement', 'hidden', 1);
-                    }
-                });
+                _this.minmax();
             });
-
             if (set.showClose) $announce.close.on('click', function() {
-                _this.stop();
-                $announce.wrap.remove();
-                _this.setCookie('jquery.announcement', 'remove', 1);
+                _this.destroy();
             });
 
             if (set.speed > 0) $announce.wrap.on('mouseleave', function() {
@@ -257,6 +296,21 @@
             }).on('mouseenter', function() {
                 _this.stop();
             });
+
+            if (set.showToggle && ((typeof set.autoHide === 'number' && set.autoHide > 0) || (set.autoHide === 'auto' && _this.size === 1))) {
+                if (set.autoHide === 'auto') set.autoHide = set.speed;
+
+                setTimeout(function() {
+                    if (!$announce.wrap.hasClass('hidden')) _this.minmax();
+                }, set.autoHide * 1000);
+            }
+            if ((typeof set.autoClose === 'number' && set.autoClose > 0) || (set.autoClose === 'auto' && _this.size === 1)) {
+                if (set.autoClose === 'auto') set.autoClose = set.speed;
+
+                setTimeout(function() {
+                    _this.destroy();
+                }, set.autoClose * 1000);
+            }
         }
     });
 

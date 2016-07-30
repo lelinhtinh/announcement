@@ -1,12 +1,30 @@
 # jQuery plugin Announcement
 
-This plugin adds a fixed board at the bottom of your browser screen to display announcements.
+Adds a fixed board at the bottom of your browser screen to display announcements.
+
+![Screenshot](http://baivong.github.io/announcement/screenshot.png)
 
 ## Demo
 
 http://baivong.github.io/announcement/
 
-## How to Use?
+## Installation
+
+Get the latest *release* of this plugin on [Release page](https://github.com/baivong/announcement/releases) or use the command line:
+
+[Bower](http://bower.io/)
+
+```bash
+$ bower install jquery.announcement
+```
+
+[npm](http://www.npmjs.com/)
+
+```bash
+$ npm install jquery.announcement
+```
+
+## Usage
 
 Announcement depends on jQuery. Include Announcement script and stylesheet in your document:
 
@@ -37,17 +55,19 @@ $(function() {
 });
 ```
 
-### Plugin Options
+### Configuration
 
-| Name       |      Type      |    Default     | Description                                                     |
-|------------|:--------------:|:--------------:|-----------------------------------------------------------------|
-| title      |     String     | 'Announcement' | It will be displayed after the announcement board is minimized. |
-| showToggle |    Boolean     |      true      | Display maximize/minimize button.                               |
-| showClose  |    Boolean     |     false      | Display close button.                                           |
-| position   |     String     | 'bottom-right' | `bottom-left` or `bottom-right`                                 |
-| width      | String, Number |      300       | Width of announcement. Can be numeric or 'auto'.                |
-| height     | String, Number |     'auto'     | Height of announcement. Can be numeric or 'auto'.               |
-| speed      |     Number     |       10       | Slideshow speed in seconds. Set `0` to disable.                 |
+| Name       |      Type      |    Default     | Description                                                      |
+|------------|:--------------:|:--------------:|------------------------------------------------------------------|
+| title      |     String     | 'Announcement' | It will be displayed after the announcement board is minimized.  |
+| showToggle |    Boolean     |      true      | Display maximize/minimize button.                                |
+| showClose  |    Boolean     |     false      | Display close button.                                            |
+| autoHide   | String, Number |     'auto'     | Timer minimizes. Can be numeric or `'auto'`. Set `0` to disable. |
+| autoClose  | String, Number |       0        | Timer close. Can be numeric or `'auto'`. Set `0` to disable.     |
+| position   |     String     | 'bottom-right' | `bottom-left` or `bottom-right`                                  |
+| width      | String, Number |      300       | Width of announcement. Can be numeric or `'auto'`.               |
+| height     | String, Number |     'auto'     | Height of announcement. Can be numeric or `'auto'`.              |
+| speed      |     Number     |       10       | Slideshow speed in seconds. Set `0` to disable.                  |
 | effect     |     String     |    'fading'    | `fading`, `zoom-in`, `zoom-out`, `rotate-left`, `rotate-right`, `move-top`, `move-right`, `move-bottom`, `move-left`, `skew-top`, `skew-right`, `skew-bottom`, `skew-left`, `random`, `shuffle` |
 
 ## Thanks to
