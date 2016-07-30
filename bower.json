@@ -1,6 +1,6 @@
 {
   "name": "jquery.announcement",
-  "description": "This plugin adds a fixed board at the bottom of your browser screen to display announcements.",
+  "description": "Adds a fixed board at the bottom of your browser screen to display announcements.",
   "main": "dist/jquery.announcement.js",
   "authors": [
     "Zzbaivong <Zzbaivong@gmail.com>"
@@ -24,6 +24,6 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "1.7.2"
+    "jquery": "^1.7.2"
   }
 }
