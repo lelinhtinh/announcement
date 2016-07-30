@@ -46,6 +46,29 @@ jQuery(function($) {
         }
     }
 
+    function onlyCheck($check, $output, key) {
+        $check.prop('checked', config[key]);
+        $output.text(config[key]);
+    }
+
+    function multiOptions($output, id, key) {
+        $('input:checked', id).prop('checked', false);
+        $('input[value="' + config[key] + '"]', id).prop('checked', true);
+        addText($output, config[key], true);
+    }
+
+    function dualTypes($text, $check, $output, key, val) {
+        if (config[key] === 'auto') {
+            $text.val(val).prop('disabled', true);
+            $check.prop('checked', true);
+            addText($output, 'auto', true, true);
+        } else {
+            $text.val(config[key]).prop('disabled', false);
+            $check.prop('checked', false);
+            addText($output, config[key], false, true);
+        }
+    }
+
 
     var config = {
 
@@ -53,6 +76,9 @@ jQuery(function($) {
 
             showToggle: true, // Boolean
             showClose: false, // Boolean
+
+            autoHide: 'auto', // Number [s] (0: disable, 'auto': when finished slideshow)
+            autoClose: 0, // Number [s] (0: disable, 'auto': when finished slideshow)
 
             position: 'bottom-right', // 'bottom-right' | 'bottom-left'
 
@@ -80,6 +106,14 @@ jQuery(function($) {
         $showClose = $('input[name="showClose"]', '#button'),
         $showCloseConfig = $('#showCloseConfig'),
 
+        $hideTime = $('input[name="hideTime"]', '#autoHide'),
+        $hideAuto = $('input[name="hideAuto"]', '#autoHide'),
+        $autoHideConfig = $('#autoHideConfig'),
+
+        $closeTime = $('input[name="closeTime"]', '#autoClose'),
+        $closeAuto = $('input[name="closeAuto"]', '#autoClose'),
+        $autoCloseConfig = $('#autoCloseConfig'),
+
         $position = $('input', '#position'),
         $positionConfig = $('#positionConfig'),
 
@@ -104,42 +138,24 @@ jQuery(function($) {
         $title.val(config.title);
         addText($titleConfig, config.title, true);
 
-        $showToggle.prop('checked', config.showToggle);
-        $showToggleConfig.text(config.showToggle);
+        onlyCheck($showToggle, $showToggleConfig, 'showToggle');
 
-        $showClose.prop('checked', config.showClose);
-        $showCloseConfig.text(config.showClose);
+        onlyCheck($showClose, $showCloseConfig, 'showClose');
 
-        $('input:checked', '#position').prop('checked', false);
-        $('input[value="' + config.position + '"]', '#position').prop('checked', true);
-        addText($positionConfig, config.position, true);
+        dualTypes($hideTime, $hideAuto, $autoHideConfig, 'autoHide', 30);
 
-        if (config.width === 'auto') {
-            $widthpx.val(300).prop('disabled', true);
-            $widthauto.prop('checked', true);
-            addText($widthConfig, 'auto', true, true);
-        } else {
-            $widthpx.val(config.width).prop('disabled', false);
-            $widthauto.prop('checked', false);
-            addText($widthConfig, config.width, false, true);
-        }
+        dualTypes($closeTime, $closeAuto, $autoCloseConfig, 'autoClose', 0);
 
-        if (config.height === 'auto') {
-            $heightpx.val(100).prop('disabled', true);
-            $heightauto.prop('checked', true);
-            addText($heightConfig, 'auto', true, true);
-        } else {
-            $heightpx.val(config.height).prop('disabled', false);
-            $heightauto.prop('checked', false);
-            addText($heightConfig, config.height, false, true);
-        }
+        multiOptions($positionConfig, '#position', 'position');
+
+        dualTypes($widthpx, $widthauto, $widthConfig, 'width', 300);
+
+        dualTypes($heightpx, $heightauto, $heightConfig, 'height', 100);
 
         $speed.val(config.speed);
         $speedConfig.text(config.speed);
 
-        $('input:checked', '#effect').prop('checked', false);
-        $('input[value="' + config.effect + '"]', '#effect').prop('checked', true);
-        addText($effectConfig, config.effect, true);
+        multiOptions($effectConfig, '#effect', 'effect');
     }
 
 
@@ -159,6 +175,34 @@ jQuery(function($) {
     $showClose.on('change', function() {
         config.showClose = this.checked;
         $showCloseConfig.text(config.showClose);
+    });
+
+    $hideTime.on('input', function() {
+        config.autoHide = toInt(this.value);
+        $autoHideConfig.text(config.autoHide);
+    });
+    $hideAuto.on('change', function() {
+        if (this.checked) {
+            config.autoHide = 'auto';
+        } else {
+            config.autoHide = toInt($hideTime.val());
+        }
+        $hideTime.prop('disabled', this.checked);
+        addText($autoHideConfig, config.autoHide, this.checked, true);
+    });
+
+    $closeTime.on('input', function() {
+        config.autoClose = toInt(this.value);
+        $autoCloseConfig.text(config.autoClose);
+    });
+    $closeAuto.on('change', function() {
+        if (this.checked) {
+            config.autoClose = 'auto';
+        } else {
+            config.autoClose = toInt($closeTime.val());
+        }
+        $closeTime.prop('disabled', this.checked);
+        addText($autoCloseConfig, config.autoClose, this.checked, true);
     });
 
     $position.on('change', function() {
@@ -206,13 +250,13 @@ jQuery(function($) {
 
     $('#submit').on('click', function() {
         sessionStorage.setItem('announcementConfig', JSON.stringify(config));
-        location.reload();
+        location.reload(true);
     });
 
     $('#reset').on('click', function() {
         if (getCookie('jquery.announcement') !== null) setCookie('jquery.announcement', null, -1);
         if (sessionStorage.announcementConfig) sessionStorage.removeItem('announcementConfig');
-        location.reload();
+        location.reload(true);
     });
 
 });

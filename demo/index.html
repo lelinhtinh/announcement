@@ -7,11 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
     <meta name="title" content="jQuery plugin announcement" />
-    <meta name="description" content="This plugin adds a fixed board at the bottom of your browser screen to display announcements." />
+    <meta name="description" content="Adds a fixed board at the bottom of your browser screen to display announcements." />
     <meta name="robots" content="all">
     <meta name="author" content="Zzbaivong">
     <meta property="og:title" content="jQuery plugin announcement" />
-    <meta property="og:description" content="This plugin adds a fixed board at the bottom of your browser screen to display announcements." />
+    <meta property="og:description" content="Adds a fixed board at the bottom of your browser screen to display announcements." />
     <meta property="og:url" content="http://baivong.github.io/announcement/" />
     <meta property="og:image" content="http://baivong.github.io/announcement/screenshot.png" />
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans:400,700">
@@ -29,7 +29,7 @@
         <div id="main">
             <header id="header">
                 <h1>jQuery plugin announcement</h1>
-                <p>This plugin adds a fixed board at the bottom of your browser screen to display announcements.</p>
+                <p>Adds a fixed board at the bottom of your browser screen to display announcements.</p>
             </header>
             <section id="config">
                 <h2>Configure</h2>
@@ -50,6 +50,24 @@
                     <p>
                         <label>
                             <input type="checkbox" name="showClose">Close</label>
+                    </p>
+                </section>
+                <section id="autoHide">
+                    <h3>autoHide</h3>
+                    <p>
+                        <label>
+                            <input type="number" name="hideTime" value="30" disabled>(s)</label>
+                        <label>
+                            <input type="checkbox" name="hideAuto" value="auto" checked>auto</label>
+                    </p>
+                </section>
+                <section id="autoClose">
+                    <h3>autoClose</h3>
+                    <p>
+                        <label>
+                            <input type="number" name="closeTime" value="0">(s)</label>
+                        <label>
+                            <input type="checkbox" name="closeAuto" value="auto">auto</label>
                     </p>
                 </section>
                 <section id="position">
@@ -170,6 +188,9 @@
         showToggle<span style="color:#a71d5d">:</span> <span id="showToggleConfig" style="color:#0086b3">true</span>, <span style="color:#969896">// Boolean</span>
         showClose<span style="color:#a71d5d">:</span> <span id="showCloseConfig" style="color:#0086b3">false</span>, <span style="color:#969896">// Boolean</span>
 
+        autoHide<span style="color:#a71d5d">:</span> <span id="autoHideConfig" style="color:#183691">'auto'</span>, <span style="color:#969896">// Number [s] (0: disable, 'auto': when finished slideshow)</span>
+        autoClose<span style="color:#a71d5d">:</span> <span id="autoCloseConfig" style="color:#0086b3">0</span>, <span style="color:#969896">// Number [s] (0: disable, 'auto': when finished slideshow)</span>
+
         position<span style="color:#a71d5d">:</span> <span id="positionConfig" style="color:#183691">'bottom-right'</span>, <span style="color:#969896">// 'bottom-right' | 'bottom-left'</span>
 
         width<span style="color:#a71d5d">:</span> <span id="widthConfig" style="color:#0086b3">300</span>, <span style="color:#969896">// 'auto' | Number [px]</span>
@@ -177,13 +198,12 @@
 
         speed<span style="color:#a71d5d">:</span> <span id="speedConfig" style="color:#0086b3">10</span>, <span style="color:#969896">// Number [s] (0: disable autorun)</span>
 
-        effect<span style="color:#a71d5d">:</span> <span id="effectConfig" style="color:#183691">'fading'</span>
-        <span style="color:#969896">// 'fading'</span>
-        <span style="color:#969896">// 'zoom-in' | 'zoom-out'</span>
-        <span style="color:#969896">// 'rotate-left' | 'rotate-right'</span>
-        <span style="color:#969896">// 'move-top' | 'move-right' | 'move-bottom' | 'move-left'</span>
-        <span style="color:#969896">// 'skew-top' | 'skew-right' | 'skew-bottom' | 'skew-left'</span>
-        <span style="color:#969896">// 'random' | 'shuffle'</span>
+        effect<span style="color:#a71d5d">:</span> <span id="effectConfig" style="color:#183691">'fading'</span> <span style="color:#969896">// 'fading'</span>
+            <span style="color:#969896">// 'zoom-in' | 'zoom-out'</span>
+            <span style="color:#969896">// 'rotate-left' | 'rotate-right'</span>
+            <span style="color:#969896">// 'move-top' | 'move-right' | 'move-bottom' | 'move-left'</span>
+            <span style="color:#969896">// 'skew-top' | 'skew-right' | 'skew-bottom' | 'skew-left'</span>
+            <span style="color:#969896">// 'random' | 'shuffle'</span>
 
     });
 
@@ -193,14 +213,17 @@
             </section>
             <div id="example">
                 <ul id="ticker">
-                    <li>Lorem ipsum dolor sit amet.
+                    <li>
+                        Lorem ipsum dolor sit amet.
                         <br />
                         <strong>Ut enim ad:</strong> Minim veniam, quis nostrud exercitation ullamco.
                         <br /> Duis aute irure dolor <a href="http://devs.forumvi.com" target="_blank">DEVs forumvi</a>.
                     </li>
-                    <li>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    <li>
+                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                     </li>
-                    <li>jQuery plugin announcement
+                    <li>
+                        jQuery plugin announcement
                         <br /> By <a href="http://baivong.github.io" target="_blank">Zzbaivong</a>
                     </li>
                 </ul>
@@ -214,12 +237,13 @@
         <a href="http://github.com/baivong/announcement">jQuery plugin announcement</a> is maintained by <a href="http://github.com/baivong">baivong</a>
     </footer>
     <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="../dist/jquery.announcement.min.js"></script>
+    <script type="text/javascript" src="../dist/jquery.announcement.js"></script>
     <script type="text/javascript" src="script.js"></script>
     <script>
     /*global $:false */
     var ribbon = ['black', 'red', 'blue', 'green', 'orange', 'purple', 'grey'][Math.floor(Math.random() * 7)];
     $('#ribbon').removeClass('black red blue green orange purple grey').addClass(ribbon);
+
     </script>
 </body>
 
