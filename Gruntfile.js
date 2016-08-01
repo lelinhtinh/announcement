@@ -46,7 +46,9 @@ module.exports = function(grunt) {
                 dest: 'dist/<%= pkg.name %>.min.js'
             },
             options: {
-                banner: '<%= meta.banner %>'
+                banner: '<%= meta.banner %>',
+                quoteStyle: 1,
+                ASCIIOnly: true
             }
         },
 
@@ -114,7 +116,7 @@ module.exports = function(grunt) {
                     'dist/*',
                     'demo/*.css',
                     'demo/*.js',
-                    'demo/index.html',
+                    'demo/index.html'
                 ]
             },
             options: {
