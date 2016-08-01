@@ -30,7 +30,7 @@
         };
 
     function Plugin(element, options) {
-        if (this.getCookie('jquery.announcement') === 'remove') {
+        if (this.getCookie('jquery.' + pluginName) === 'remove') {
             $(element).remove();
             return;
         }
@@ -44,10 +44,12 @@
         this.size = 0;
         this.current = 0;
         this.count = 0;
+        this.isHide = false;
+        this.isClose = true;
         this.run = undefined;
 
         this.build();
-        if (this.size > 0) this.init();
+        this.init();
     }
 
     $.extend(Plugin.prototype, {
@@ -90,40 +92,41 @@
         },
         genNode: function(clazz) {
             return $('<div>', {
-                'class': 'announcement-' + clazz
+                class: pluginName + '-' + clazz
             });
         },
         build: function() {
-            var set = this.settings,
+            var _this = this,
+                set = _this.settings,
                 effect = set.effect,
 
-                $wrap = this.genNode('wrap'),
-                $title = this.genNode('title'),
-                $content = this.genNode('content'),
-                $buttons = this.genNode('button'),
+                $wrap = _this.genNode('wrap'),
+                $title = _this.genNode('title'),
+                $content = _this.genNode('content'),
+                $buttons = _this.genNode('button'),
                 $toggle,
                 $close,
-                $list = $(this.element).addClass('announcement-list'),
+                $list = $(_this.element).addClass(pluginName + '-list'),
                 $items = $list.children('li'),
                 $paging,
                 $numbers,
 
                 max = 0;
 
-            this.size = $items.length;
+            _this.size = $items.length;
 
-            if (!this.size) return;
+            if (!_this.size) return;
 
             $content.append($list);
             $wrap.addClass(set.position);
             $wrap.append($buttons).append($title).append($content).appendTo('body');
 
             if (set.showClose) {
-                $close = this.genNode('close');
+                $close = _this.genNode('close');
                 $buttons.append($close);
             }
             if (set.showToggle) {
-                $toggle = this.genNode('toggle');
+                $toggle = _this.genNode('toggle');
                 $buttons.append($toggle);
             }
 
@@ -135,11 +138,11 @@
             $list.add($items).width(set.width);
             $wrap.width($wrap.width());
 
-            if (this.size === 1) {
+            if (_this.size === 1) {
                 max = $items.eq(0).height();
             } else {
 
-                $paging = this.genNode('paging');
+                $paging = _this.genNode('paging');
                 $content.append($paging);
 
                 $items.each(function(index, value) {
@@ -165,16 +168,19 @@
             if (set.height !== 'auto' && $.type(set.height) === 'number') max = set.height;
             if (max > 0) $list.add($items).height(max);
 
-            if (set.effect === 'random' || set.effect === 'shuffle') effect = this.randomEffect();
+            if (set.effect === 'random' || set.effect === 'shuffle') effect = _this.randomEffect();
             if (effect !== 'fading') effect += ' fading';
             $list.addClass(effect);
 
-            if (this.getCookie('jquery.announcement') === 'hidden') {
+            if (_this.getCookie('jquery.' + pluginName) === 'hidden') {
                 $wrap.addClass('hidden');
                 $content.hide();
+                _this.isHide = true;
+
+                if (set.autoHide !== 0) set.autoHide = 0;
             }
 
-            this.nodes = {
+            _this.nodes = {
                 wrap: $wrap,
                 title: $title,
                 content: $content,
@@ -184,10 +190,15 @@
                 items: $items,
                 numbers: $numbers
             };
+
+            _this.isClose = false;
         },
         active: function(index) {
             var $announce = this.nodes,
-                set = this.settings;
+                set = this.settings,
+                $active = $announce.items.eq(index);
+
+            if (!$active.length) return;
 
             if (set.effect === 'shuffle') $announce.list.addClass(this.randomEffect(true));
 
@@ -199,23 +210,22 @@
             this.count++;
 
             if (this.count > this.size) {
-                if (set.autoHide === 'auto' && set.showToggle) {
-                    this.minmax();
+                if (set.autoHide === 'auto') {
+                    this.toggle();
                     set.autoHide = 0;
                 }
 
                 if (set.autoClose === 'auto') {
-                    this.destroy();
+                    this.close();
                     set.autoClose = 0;
                 }
             }
         },
-        play: function() {
+        start: function() {
             var _this = this,
-                set = _this.settings,
-                $announce = _this.nodes;
+                set = _this.settings;
 
-            if (set.speed === 0 || set.size === 1 || $announce.wrap.hasClass('hidden')) return;
+            if (set.speed === 0 || _this.size === 1 || _this.isHide || _this.isClose) return;
 
             _this.current++;
             if (_this.current >= _this.size) _this.current = 0;
@@ -223,83 +233,99 @@
             clearTimeout(_this.run);
             _this.run = setTimeout(function() {
                 _this.active(_this.current);
-                _this.play();
+                _this.start();
             }, (set.speed * 1000));
         },
         stop: function() {
-            if (this.run) {
-                clearTimeout(this.run);
-                this.run = undefined;
-                this.current--;
-            }
+            if (this.settings.speed === 0 || this.size === 1 || this.isHide || this.isClose || !this.run) return;
+
+            clearTimeout(this.run);
+            this.run = undefined;
+            this.current--;
         },
-        minmax: function() {
+        toggle: function() {
             var _this = this,
                 $wrap = this.nodes.wrap;
 
-            if (!$wrap.length) return;
+            if (_this.isClose) return;
 
-            _this.nodes.content.slideToggle('slow', function() {
-                if ($wrap.hasClass('hidden')) {
+            _this.nodes.content.stop(true, false).slideToggle('slow', function() {
+                if (_this.isClose) return;
+
+                if (_this.isHide) {
                     $wrap.removeClass('hidden');
-                    _this.play();
-                    _this.setCookie('jquery.announcement', 'hidden', -1);
+                    _this.isHide = false;
+
+                    _this.start();
+                    _this.setCookie('jquery.' + pluginName, 'hidden', -1);
                 } else {
                     $wrap.addClass('hidden');
+                    _this.isHide = true;
+
                     _this.stop();
-                    _this.setCookie('jquery.announcement', 'hidden', 1);
+                    _this.setCookie('jquery.' + pluginName, 'hidden', 1);
                 }
             });
         },
-        destroy: function() {
-            var $wrap = this.nodes.wrap;
+        close: function() {
+            var _this = this,
+                $wrap = _this.nodes.wrap;
 
-            if (!$wrap.length) return;
+            if (_this.isClose) return;
 
             this.stop();
             $wrap.fadeOut('slow', function() {
+                if (_this.isClose) return;
+
                 $wrap.remove();
+                _this.isClose = true;
             });
-            this.setCookie('jquery.announcement', 'remove', 1);
+            this.setCookie('jquery.' + pluginName, 'remove', 1);
         },
         init: function() {
             var _this = this,
                 set = _this.settings,
                 $announce = _this.nodes;
 
-            _this.active(0);
-            _this.play();
+            if (_this.size === 0 || _this.isClose) return;
+
+            _this.active(_this.current);
+            _this.start();
 
             if (_this.size > 1) $announce.numbers.on('click', function() {
                 var index = $(this).data('index');
+
                 if (index !== _this.current) _this.active(index);
+
+                if (set.autoHide !== 0) set.autoHide = 0;
+                if (set.autoClose !== 0) set.autoClose = 0;
             });
 
             if (set.showToggle) $announce.toggle.on('click', function() {
-                _this.minmax();
+                _this.toggle();
             });
             if (set.showClose) $announce.close.on('click', function() {
-                _this.destroy();
+                _this.close();
             });
 
             if (set.speed > 0) $announce.wrap.on('mouseleave', function() {
-                _this.play();
+                _this.start();
             }).on('mouseenter', function() {
                 _this.stop();
             });
 
-            if (set.showToggle && ((typeof set.autoHide === 'number' && set.autoHide > 0) || (set.autoHide === 'auto' && _this.size === 1))) {
+            if ((typeof set.autoHide === 'number' && set.autoHide > 0) || (set.autoHide === 'auto' && _this.size === 1)) {
                 if (set.autoHide === 'auto') set.autoHide = set.speed;
 
                 setTimeout(function() {
-                    if (!$announce.wrap.hasClass('hidden')) _this.minmax();
+                    if (!_this.isHide) _this.toggle();
                 }, set.autoHide * 1000);
             }
             if ((typeof set.autoClose === 'number' && set.autoClose > 0) || (set.autoClose === 'auto' && _this.size === 1)) {
                 if (set.autoClose === 'auto') set.autoClose = set.speed;
 
                 setTimeout(function() {
-                    _this.destroy();
+                    _this.close();
                 }, set.autoClose * 1000);
             }
         }
@@ -314,3 +340,4 @@
     };
 
 })(jQuery, window, document);
+
