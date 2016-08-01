@@ -2,36 +2,6 @@ jQuery(function($) {
 
     'use strict';
 
-    function getCookie(name) {
-        var cname = name + '=',
-            cpos = document.cookie.indexOf(cname),
-            cstart,
-            cend;
-
-        if (cpos !== -1) {
-            cstart = cpos + cname.length;
-            cend = document.cookie.indexOf(';', cstart);
-            if (cend === -1) cend = document.cookie.length;
-            return decodeURIComponent(document.cookie.substring(cstart, cend));
-        }
-
-        return null;
-    }
-
-    function setCookie(cname, cvalue, exdays, path) {
-        var domain = '',
-            d = new Date();
-
-        if (exdays) {
-            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-            exdays = '; expires=' + d.toUTCString();
-        }
-        if (!path) path = '/';
-
-        document.cookie = cname + '=' + cvalue + '; path=' + path + exdays + domain + ';';
-    }
-
-
     function toInt(str) {
         return parseInt(str, 10);
     }
@@ -254,7 +224,9 @@ jQuery(function($) {
     });
 
     $('#reset').on('click', function() {
-        if (getCookie('jquery.announcement') !== null) setCookie('jquery.announcement', null, -1);
+        var instance = $('#ticker').data('plugin_announcement');
+
+        if (instance.getCookie('jquery.announcement') !== null) instance.setCookie('jquery.announcement', null, -1);
         if (sessionStorage.announcementConfig) sessionStorage.removeItem('announcementConfig');
         location.reload(true);
     });
