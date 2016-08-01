@@ -15,277 +15,282 @@
 @margin: (20px - (@borderSize * 2)) / 2;
 
 .announcement- {
-	&wrap {
-		background: @bg;
-		border: @borderSize solid darken(@bg, 20%);
-		position: fixed;
-		z-index: 888;
+    &wrap {
+        box-sizing: content-box;
+        background: @bg;
+        border: @borderSize solid lighten(@bg, 20%);
+        position: fixed;
+        z-index: 888;
 
-		&.bottom-right {
-			right: -@borderSize;
-			bottom: -@borderSize;
-		}
+        &.bottom-right {
+            right: -@borderSize;
+            bottom: -@borderSize;
+        }
 
-		&.bottom-left {
-			left: -@borderSize;
-			bottom: -@borderSize;
-		}
+        &.bottom-left {
+            left: -@borderSize;
+            bottom: -@borderSize;
+        }
 
-		&.hidden {
-			.announcement-title {
-				opacity: 1;
-			}
+        &.hidden {
+            .announcement-title {
+                opacity: 1;
+            }
 
-			div.announcement-toggle {
-				background-image: url("../assets/up.png");
-			}
-		}
-	}
+            div.announcement-toggle {
+                background-image: url("../assets/up.png");
+            }
+        }
+    }
 
-	&title {
-		height: @titleHeight;
-		line-height: @titleHeight;
-		padding: 0 (@buttonSize + @buttonMargin + @titlePadding) 0 @titlePadding;
-		color: @base;
-		font-size: 1.2em;
-		text-transform: uppercase;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-		opacity: 0;
-		transition: opacity @easing (@speed - 300ms);
-	}
+    &title {
+        height: @titleHeight;
+        line-height: @titleHeight;
+        padding: 0 (@buttonSize + @buttonMargin + @titlePadding) 0 @titlePadding;
+        color: @base;
+        font-size: 1.2em;
+        text-transform: uppercase;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        opacity: 0;
+        transition: opacity @easing (@speed - 300ms);
 
-	&button {
-		position: absolute;
-		z-index: 10;
-		right: 0;
-		top: 0;
+        &.no-button {
+            padding-right: @titlePadding;
+        }
+        &.two-button {
+            padding-right: ((@buttonSize + @buttonMargin) * 2 + @titlePadding);
+        }
+    }
 
-		> div {
-			width: @buttonSize;
-			height: @buttonSize;
-			margin: @buttonMargin @buttonMargin @buttonMargin 0;
-			text-indent: -9999px;
-			background: none no-repeat center center lighten(@bg, 10%);
-			float: right;
-			transition: background @easing (@speed - 300ms);
-			cursor: pointer;
+    &button {
+        position: absolute;
+        z-index: 10;
+        right: 0;
+        top: 0;
 
-			&.announcement-toggle {
-				background-image: url("../assets/down.png");
+        > div {
+            width: @buttonSize;
+            height: @buttonSize;
+            margin: @buttonMargin @buttonMargin @buttonMargin 0;
+            text-indent: -9999px;
+            background: none no-repeat center center lighten(@bg, 10%);
+            float: right;
+            transition: background @easing (@speed - 300ms);
+            cursor: pointer;
 
-				&:hover {
-					background-color: @toggle;
-				}
-			}
+            &.announcement-toggle {
+                background-image: url("../assets/down.png");
 
-			&.announcement-close {
-				background-image: url("../assets/close.png");
+                &:hover {
+                    background-color: @toggle;
+                }
+            }
 
-				&:hover {
-					background-color: @close;
-				}
-			}
-		}
+            &.announcement-close {
+                background-image: url("../assets/close.png");
 
-		+ .announcement-title {
-			padding-right: ((@buttonSize + @buttonMargin) * 2 + @titlePadding);
-		}
-	}
+                &:hover {
+                    background-color: @close;
+                }
+            }
+        }
+    }
 
-	&content {
-		margin: @margin;
-		overflow: hidden;
-		font-size: 1em;
-		color: @base;
+    &content {
+        margin: @margin;
+        overflow: hidden;
+        font-size: 1em;
+        color: @base;
 
-		a {
-			color: @highlight;
-			font-weight: bold;
-			text-decoration: none;
+        a {
+            color: @highlight;
+            font-weight: bold;
+            text-decoration: none;
 
-			&:hover {
-				text-decoration: underline;
-			}
-		}
-	}
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
 
-	&list {
-		margin: 0;
-		padding: 0;
-		position: relative;
-		list-style: none;
-		overflow: hidden;
+    &list {
+        margin: 0;
+        padding: 0;
+        position: relative;
+        list-style: none;
+        overflow: hidden;
 
-		> li {
-			text-align: justify;
-			line-height: 1.4em;
-			position: absolute;
-			left: 0;
-			top: 0;
-			visibility: hidden;
-			overflow: hidden;
-			transition: all @easing @speed;
+        > li {
+            text-align: justify;
+            line-height: 1.4em;
+            position: absolute;
+            left: 0;
+            top: 0;
+            visibility: hidden;
+            overflow: hidden;
+            transition: all @easing @speed;
 
-			&.active {
-				visibility: visible;
-			}
+            &.active {
+                visibility: visible;
+            }
 
-			&::-webkit-scrollbar {
-				width: 3px;
-			}
+            &::-webkit-scrollbar {
+                width: 3px;
+            }
 
-			&::-webkit-scrollbar-thumb {
-				background-color: @scrollbar;
-				border-radius: 0;
-			}
+            &::-webkit-scrollbar-thumb {
+                background-color: @scrollbar;
+                border-radius: 0;
+            }
 
-			&::-webkit-scrollbar-thumb:hover {
-				background-color: darken(@scrollbar, 20%);
-			}
+            &::-webkit-scrollbar-thumb:hover {
+                background-color: darken(@scrollbar, 20%);
+            }
 
-			&::-webkit-scrollbar-track {
-				background-color: lighten(@scrollbar, 20%);
-			}
-		}
+            &::-webkit-scrollbar-track {
+                background-color: lighten(@scrollbar, 20%);
+            }
+        }
 
-		&:hover > li {
-			overflow: auto;
-		}
+        &:hover > li {
+            overflow: auto;
+        }
 
-		&.fading > li {
-			opacity: 0;
+        &.fading > li {
+            opacity: 0;
 
-			&.active {
-				opacity: 1;
-			}
-		}
+            &.active {
+                opacity: 1;
+            }
+        }
 
-		&.zoom- {
-			&in > li {
-				transform: scale(3);
+        &.zoom- {
+            &in > li {
+                transform: scale(3);
 
-				&.active {
-					transform: scale(1);
-				}
-			}
+                &.active {
+                    transform: scale(1);
+                }
+            }
 
-			&out > li {
-				transform: scale(-3);
+            &out > li {
+                transform: scale(-3);
 
-				&.active {
-					transform: scale(1);
-				}
-			}
-		}
+                &.active {
+                    transform: scale(1);
+                }
+            }
+        }
 
-		&.rotate- {
-			&left > li {
-				transform: rotate(-180deg);
+        &.rotate- {
+            &left > li {
+                transform: rotate(-180deg);
 
-				&.active {
-					transform: rotate(0);
-				}
-			}
+                &.active {
+                    transform: rotate(0);
+                }
+            }
 
-			&right > li {
-				transform: rotate(180deg);
+            &right > li {
+                transform: rotate(180deg);
 
-				&.active {
-					transform: rotate(0);
-				}
-			}
-		}
+                &.active {
+                    transform: rotate(0);
+                }
+            }
+        }
 
-		&.move- {
-			&top > li {
-				transform: translateY(-100%);
+        &.move- {
+            &top > li {
+                transform: translateY(-100%);
 
-				&.active {
-					transform: translateY(0);
-				}
-			}
+                &.active {
+                    transform: translateY(0);
+                }
+            }
 
-			&bottom > li {
-				transform: translateY(100%);
+            &bottom > li {
+                transform: translateY(100%);
 
-				&.active {
-					transform: translateY(0);
-				}
-			}
+                &.active {
+                    transform: translateY(0);
+                }
+            }
 
-			&left > li {
-				transform: translateX(-100%);
+            &left > li {
+                transform: translateX(-100%);
 
-				&.active {
-					transform: translateX(0);
-				}
-			}
+                &.active {
+                    transform: translateX(0);
+                }
+            }
 
-			&right > li {
-				transform: translateX(100%);
+            &right > li {
+                transform: translateX(100%);
 
-				&.active {
-					transform: translateX(0);
-				}
-			}
-		}
+                &.active {
+                    transform: translateX(0);
+                }
+            }
+        }
 
-		&.skew- {
-			&top > li {
-				transform: skewY(-180deg);
+        &.skew- {
+            &top > li {
+                transform: skewY(-180deg);
 
-				&.active {
-					transform: skewY(0);
-				}
-			}
+                &.active {
+                    transform: skewY(0);
+                }
+            }
 
-			&bottom > li {
-				transform: skewY(180deg);
+            &bottom > li {
+                transform: skewY(180deg);
 
-				&.active {
-					transform: skewY(0);
-				}
-			}
+                &.active {
+                    transform: skewY(0);
+                }
+            }
 
-			&left > li {
-				transform: skewX(-180deg);
+            &left > li {
+                transform: skewX(-180deg);
 
-				&.active {
-					transform: skewX(0);
-				}
-			}
+                &.active {
+                    transform: skewX(0);
+                }
+            }
 
-			&right > li {
-				transform: skewX(180deg);
+            &right > li {
+                transform: skewX(180deg);
 
-				&.active {
-					transform: skewX(0);
-				}
-			}
-		}
-	}
+                &.active {
+                    transform: skewX(0);
+                }
+            }
+        }
+    }
 
-	&paging {
-		text-align: center;
-		margin-top: @margin;
+    &paging {
+        text-align: center;
+        margin-top: @margin;
 
-		> span {
-			background: lighten(@bg, 10%);
-			display: inline-block;
-			vertical-align: bottom;
-			text-indent: -9999px;
-			margin: @buttonMargin 0;
-			width: 12px;
-			height: 4px;
-			border: 5px solid @bg;
-			cursor: pointer;
+        > span {
+            box-sizing: content-box;
+            background: lighten(@bg, 10%);
+            display: inline-block;
+            vertical-align: bottom;
+            text-indent: -9999px;
+            margin: @buttonMargin 0;
+            width: 12px;
+            height: 4px;
+            border: 5px solid @bg;
+            cursor: pointer;
 
-			&.active,
-			&:hover {
-				background: @highlight;
-			}
-		}
-	}
+            &.active,
+            &:hover {
+                background: @highlight;
+            }
+        }
+    }
 }
