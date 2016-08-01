@@ -1,29 +1,29 @@
 {
-  "name": "jquery.announcement",
-  "description": "Adds a fixed board at the bottom of your browser screen to display announcements.",
-  "main": "dist/jquery.announcement.js",
-  "authors": [
-    "Zzbaivong <Zzbaivong@gmail.com>"
-  ],
-  "license": "MIT",
-  "keywords": [
-    "ecosystem:jquery",
-    "jquery-plugin",
-    "jquery",
-    "plugins",
-    "announcement",
-    "notice",
-    "news-ticker"
-  ],
-  "homepage": "https://github.com/baivong/announcement",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
-  "dependencies": {
-    "jquery": "^1.7.2"
-  }
+    "name": "jquery.announcement",
+    "description": "Adds a fixed widget at the bottom of your browser screen to display announcements.",
+    "main": "dist/jquery.announcement.js",
+    "authors": [
+        "Zzbaivong <Zzbaivong@gmail.com>"
+    ],
+    "license": "MIT",
+    "keywords": [
+        "ecosystem:jquery",
+        "jquery-plugin",
+        "jquery",
+        "plugins",
+        "announcement",
+        "notice",
+        "news-ticker"
+    ],
+    "homepage": "https://github.com/baivong/announcement",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "jquery": "^1.7.2"
+    }
 }
