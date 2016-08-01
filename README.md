@@ -1,6 +1,6 @@
 # jQuery plugin Announcement
 
-Adds a fixed board at the bottom of your browser screen to display announcements.
+Adds a fixed widget at the bottom of your browser screen to display announcements.
 
 ![Screenshot](http://baivong.github.io/announcement/screenshot.png)
 
@@ -59,7 +59,7 @@ $(function() {
 
 | Name       |      Type      |    Default     | Description                                                      |
 |------------|:--------------:|:--------------:|------------------------------------------------------------------|
-| title      |     String     | 'Announcement' | It will be displayed after the announcement board is minimized.  |
+| title      |     String     | 'Announcement' | Display after the announcement widget is minimized.              |
 | showToggle |    Boolean     |      true      | Display maximize/minimize button.                                |
 | showClose  |    Boolean     |     false      | Display close button.                                            |
 | autoHide   | String, Number |     'auto'     | Timer minimizes. Can be numeric or `'auto'`. Set `0` to disable. |
@@ -69,6 +69,67 @@ $(function() {
 | height     | String, Number |     'auto'     | Height of announcement. Can be numeric or `'auto'`.              |
 | speed      |     Number     |       10       | Slideshow speed in seconds. Set `0` to disable.                  |
 | effect     |     String     |    'fading'    | `fading`, `zoom-in`, `zoom-out`, `rotate-left`, `rotate-right`, `move-top`, `move-right`, `move-bottom`, `move-left`, `skew-top`, `skew-right`, `skew-bottom`, `skew-left`, `random`, `shuffle` |
+
+### Publish method
+
+Get plugin instance
+```javascript
+var instance = $('.newsticker').data('plugin_announcement');
+```
+
+#### .active(index)
+
+Show announcement according to `index`
+```javascript
+instance.active(0);
+```
+
+#### .start()
+
+Start slideshow
+```javascript
+instance.start();
+```
+
+#### .stop()
+
+Stop slideshow
+```javascript
+instance.stop();
+```
+
+#### .toggle()
+
+Minimize/maximize Announcement widget
+```javascript
+instance.toggle();
+```
+
+#### .close()
+
+Remove Announcement widget
+```javascript
+instance.close();
+```
+
+#### .getCookie(name)
+
+Get cookie has name is `jquery.announcement`
+```javascript
+instance.getCookie('jquery.announcement');
+```
+
+#### .setCookie(name, value, exdays, path)
+
+Set cookie to hide Announcement widget
+```javascript
+instance.setCookie('jquery.announcement', 'hidden', 1);
+```
+
+Remove cookie
+```javascript
+instance.setCookie('jquery.announcement', '', -1);
+```
 
 ## Thanks to
 
