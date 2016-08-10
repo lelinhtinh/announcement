@@ -39,6 +39,10 @@ jQuery(function($) {
         }
     }
 
+    function onlyNumber ($input, $output, key) {
+        $input.val(config[key]);
+        $output.text(config[key]);
+    }
 
     var config = {
 
@@ -54,6 +58,7 @@ jQuery(function($) {
 
             width: 300, // 'auto' | Number [px]
             height: 'auto', // 'auto' | Number [px]
+            zIndex: 99999, // Number
 
             speed: 10, // Number [s] (0: disable autorun)
 
@@ -95,6 +100,9 @@ jQuery(function($) {
         $heightauto = $('input[name="heightauto"]', '#height'),
         $heightConfig = $('#heightConfig'),
 
+        $zIndex = $('input', '#zIndex'),
+        $zIndexConfig = $('#zIndexConfig'),
+
         $speed = $('input', '#speed'),
         $speedConfig = $('#speedConfig'),
 
@@ -122,8 +130,9 @@ jQuery(function($) {
 
         dualTypes($heightpx, $heightauto, $heightConfig, 'height', 100);
 
-        $speed.val(config.speed);
-        $speedConfig.text(config.speed);
+        onlyNumber ($speed, $speedConfig, 'speed');
+
+        onlyNumber ($zIndex, $zIndexConfig, 'zIndex');
 
         multiOptions($effectConfig, '#effect', 'effect');
     }
@@ -211,6 +220,11 @@ jQuery(function($) {
     $speed.on('input', function() {
         config.speed = toInt(this.value);
         $speedConfig.text(config.speed);
+    });
+
+    $zIndex.on('input', function() {
+        config.zIndex = toInt(this.value);
+        $zIndexConfig.text(config.zIndex);
     });
 
     $effect.on('change', function() {
