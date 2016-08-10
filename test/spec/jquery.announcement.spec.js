@@ -60,6 +60,7 @@
                 position: 'bottom-right',
                 width: 300,
                 height: 'auto',
+                zIndex: 99999,
                 speed: 10,
                 effect: 'fading',
                 foo: 'bar'
