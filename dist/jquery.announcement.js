@@ -1,5 +1,5 @@
 /*!
-*  jquery.announcement - v1.2.1
+*  jquery.announcement - v1.3.0
 *  Adds a fixed widget at the bottom of your browser screen to display announcements.
 *  https://github.com/baivong/announcement
 *
