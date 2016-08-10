@@ -36,7 +36,9 @@
                 // 'skew-top' | 'skew-right' | 'skew-bottom' | 'skew-left'
                 // 'random' | 'shuffle'
 
-        };
+        },
+
+        $window = $(window);
 
     function Plugin(element, options) {
         if (this.getCookie('jquery.' + pluginName) === 'remove') {
@@ -62,6 +64,43 @@
     }
 
     $.extend(Plugin.prototype, {
+        // http://stackoverflow.com/a/14763909
+        detectCSSFeature: function(featurename) {
+            var feature = false,
+                domPrefixes = 'Webkit Moz ms O'.split(' '),
+                elm = document.createElement('div'),
+                featurenameCapital = null;
+
+            featurename = featurename.toLowerCase();
+
+            if (elm.style[featurename] !== undefined) { feature = true; }
+
+            if (feature === false) {
+                featurenameCapital = featurename.charAt(0).toUpperCase() + featurename.substr(1);
+                for (var i = 0; i < domPrefixes.length; i++) {
+                    if (elm.style[domPrefixes[i] + featurenameCapital] !== undefined) {
+                        feature = true;
+                        break;
+                    }
+                }
+            }
+            return feature;
+        },
+        debounce: function(func, wait, immediate) {
+            var timeout;
+            return function() {
+                var context = this,
+                    args = arguments;
+                var later = function() {
+                    timeout = null;
+                    if (!immediate) func.apply(context, args);
+                };
+                var callNow = immediate && !timeout;
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+                if (callNow) func.apply(context, args);
+            };
+        },
         getCookie: function(name) {
             var cname = name + '=',
                 cpos = document.cookie.indexOf(cname),
@@ -117,10 +156,8 @@
                 $close,
                 $list = $(_this.element).addClass(pluginName + '-list'),
                 $items = $list.children('li'),
-                $paging,
-                $numbers,
-
-                max = 0;
+                $paging = this.genNode('paging'),
+                $numbers;
 
             _this.size = $items.length;
 
@@ -143,25 +180,21 @@
             if (set.showToggle && set.showClose) $title.addClass('two-button');
             if (set.title !== '') $title.text(set.title);
 
-            if (set.width === 'auto') set.width = $list.width();
-            $list.add($items).width(set.width);
-            $wrap.width($wrap.width());
-
-            if (_this.size === 1) {
-                max = $items.eq(0).height();
+            if (effect !== 'fading' && _this.detectCSSFeature('transform')) {
+                if (set.effect === 'random' || set.effect === 'shuffle') effect = _this.randomEffect() + ' fading';
             } else {
+                effect = 'fading';
+            }
+            $list.addClass(effect);
 
-                $paging = _this.genNode('paging');
+            if (_this.size > 1) {
                 $content.append($paging);
 
-                $items.each(function(index, value) {
+                $items.each(function(index) {
                     var $num = $('<span>', {
-                            'data-index': index,
-                            text: (index + 1)
-                        }),
-                        currHeight = $(value).height();
-
-                    if (currHeight > max) max = currHeight;
+                        'data-index': index,
+                        text: (index + 1)
+                    });
 
                     $num.appendTo($paging);
 
@@ -171,22 +204,6 @@
                         $numbers = $numbers.add($num);
                     }
                 });
-
-            }
-
-            if (set.height !== 'auto' && $.type(set.height) === 'number') max = set.height;
-            if (max > 0) $list.add($items).height(max);
-
-            if (set.effect === 'random' || set.effect === 'shuffle') effect = _this.randomEffect();
-            if (effect !== 'fading') effect += ' fading';
-            $list.addClass(effect);
-
-            if (_this.getCookie('jquery.' + pluginName) === 'hidden') {
-                $wrap.addClass('hidden');
-                $content.hide();
-                _this.isHide = true;
-
-                if (set.autoHide !== 0) set.autoHide = 0;
             }
 
             _this.nodes = {
@@ -200,7 +217,65 @@
                 numbers: $numbers
             };
 
+            _this.autoResize();
+            if (_this.getCookie('jquery.' + pluginName) === 'hidden') {
+                $wrap.addClass('hidden');
+                $content.hide();
+                _this.isHide = true;
+
+                if (set.autoHide !== 0) set.autoHide = 0;
+            }
+
             _this.isClose = false;
+        },
+        autoResize: function() {
+            var set = this.settings,
+                $wrap = this.nodes.wrap,
+                $list = this.nodes.list,
+                $items = this.nodes.items,
+                wrapHeight,
+                winHeight = $window.height(),
+                wrapWidth,
+                winWidth = $window.width(),
+                maxHeight = 0;
+
+            $wrap.add($list).css({
+                width: 'auto',
+                height: 'auto'
+            });
+
+            if (set.width === 'auto') set.width = $list.width();
+            $list.width(set.width);
+            $wrap.width($wrap.width());
+
+            wrapWidth = $wrap.outerWidth();
+            if (wrapWidth > winWidth) {
+                $wrap.width(winWidth - 2);
+                $list.width(winWidth - (wrapWidth - $list.outerWidth()));
+            }
+
+            if (this.size === 1) {
+                maxHeight = $items.eq(0).height();
+            } else {
+                $items.each(function() {
+                    var currHeight = $(this).height();
+
+                    if (currHeight > maxHeight) maxHeight = currHeight;
+                });
+            }
+
+            if (set.height !== 'auto' && $.type(set.height) === 'number') maxHeight = set.height;
+            if (maxHeight > 0) $list.height(maxHeight);
+
+            wrapHeight = $wrap.outerHeight();
+            if (wrapHeight > winHeight) {
+                $list.height(winHeight - (wrapHeight - maxHeight));
+            }
+
+            $items.css({
+                width: $list.width(),
+                height: $list.height()
+            });
         },
         active: function(index) {
             var $announce = this.nodes,
@@ -294,17 +369,23 @@
         init: function() {
             var _this = this,
                 set = _this.settings,
-                $announce = _this.nodes;
+                $announce = _this.nodes,
+                responsive;
 
             if (_this.size === 0 || _this.isClose) return;
 
             _this.active(_this.current);
             _this.start();
 
+            responsive = _this.debounce(function() {
+                _this.autoResize();
+            }, 250);
+            $window.on('resize', responsive);
+
             if (_this.size > 1) $announce.numbers.on('click', function() {
                 var index = $(this).data('index');
 
-                if (index !== _this.current) _this.active(index);
+                _this.active(index);
 
                 if (set.autoHide !== 0) set.autoHide = 0;
                 if (set.autoClose !== 0) set.autoClose = 0;
@@ -349,4 +430,3 @@
     };
 
 })(jQuery, window, document);
-
