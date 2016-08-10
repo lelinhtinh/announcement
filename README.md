@@ -67,6 +67,7 @@ $(function() {
 | position   |     String     | 'bottom-right' | `bottom-left` or `bottom-right`                                  |
 | width      | String, Number |      300       | Width of announcement. Can be numeric or `'auto'`.               |
 | height     | String, Number |     'auto'     | Height of announcement. Can be numeric or `'auto'`.              |
+| zIndex     |     Number     |      99999     | Set CSS `z-index` property of the announcement widget.           |
 | speed      |     Number     |       10       | Slideshow speed in seconds. Set `0` to disable.                  |
 | effect     |     String     |    'fading'    | `fading`, `zoom-in`, `zoom-out`, `rotate-left`, `rotate-right`, `move-top`, `move-right`, `move-bottom`, `move-left`, `skew-top`, `skew-right`, `skew-bottom`, `skew-left`, `random`, `shuffle` |
 
@@ -112,6 +113,13 @@ Remove Announcement widget
 instance.close();
 ```
 
+#### .autoResize()
+
+Update size of the widget when window size changes
+```javascript
+instance.autoResize();
+```
+
 #### .getCookie(name)
 
 Get cookie has name is `jquery.announcement`
@@ -131,10 +139,17 @@ Remove cookie
 instance.setCookie('jquery.announcement', '', -1);
 ```
 
+### .detectCSSFeature(name)
+
+Detecting browser supports CSS feature
+```javascript
+instance.detectCSSFeature('transform');
+```
+
 ## Thanks to
 
 [jQuery boilerplate team](http://jqueryboilerplate.com) and a bunch of awesome [contributors](https://github.com/jquery-boilerplate/boilerplate/graphs/contributors).
 
 ## License
 
-[MIT License](https://opensource.org/licenses/MIT) © Zzbaivong
+[MIT License](https://baivong.mit-license.org/) © Zzbaivong
