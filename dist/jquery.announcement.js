@@ -26,6 +26,7 @@
 
             width: 300, // 'auto' | Number [px]
             height: 'auto', // 'auto' | Number [px]
+            zIndex: 99999, // Number
 
             speed: 10, // Number [s] (0: disable autorun)
 
@@ -167,6 +168,8 @@
             $wrap.addClass(set.position);
             $wrap.append($buttons).append($title).append($content).appendTo('body');
 
+            if (set.zIndex !== 99999 && typeof set.zIndex === 'number') $wrap.css('z-index', set.zIndex);
+
             if (set.showClose) {
                 $close = _this.genNode('close');
                 $buttons.append($close);
@@ -233,6 +236,7 @@
                 $wrap = this.nodes.wrap,
                 $list = this.nodes.list,
                 $items = this.nodes.items,
+                $content = this.nodes.content,
                 wrapHeight,
                 winHeight = $window.height(),
                 wrapWidth,
@@ -243,6 +247,8 @@
                 width: 'auto',
                 height: 'auto'
             });
+
+            if (this.isHide) $content.show();
 
             if (set.width === 'auto') set.width = $list.width();
             $list.width(set.width);
@@ -276,6 +282,8 @@
                 width: $list.width(),
                 height: $list.height()
             });
+
+            if (this.isHide) $content.hide();
         },
         active: function(index) {
             var $announce = this.nodes,
