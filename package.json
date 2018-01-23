@@ -33,7 +33,7 @@
         "start": "grunt"
     },
     "dependencies": {
-        "jquery": "^1.7.2"
+        "jquery": "^3.0.0"
     },
     "devDependencies": {
         "grunt": "^1.0.1",
