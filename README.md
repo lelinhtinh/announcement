@@ -3,6 +3,7 @@
 Adds a fixed widget at the bottom of your browser screen to display announcements.
 
 ![Screenshot](http://baivong.github.io/announcement/screenshot.png)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Flelinhtinh%2Fannouncement.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Flelinhtinh%2Fannouncement?ref=badge_shield)
 
 ## Demo
 
@@ -153,3 +154,6 @@ instance.detectCSSFeature('transform');
 ## License
 
 [MIT License](https://baivong.mit-license.org/) © Zzbaivong
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Flelinhtinh%2Fannouncement.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Flelinhtinh%2Fannouncement?ref=badge_large)
