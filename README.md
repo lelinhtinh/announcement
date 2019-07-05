@@ -1,13 +1,14 @@
 # jQuery plugin Announcement
 
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Flelinhtinh%2Fannouncement.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Flelinhtinh%2Fannouncement?ref=badge_shield)
+
 Adds a fixed widget at the bottom of your browser screen to display announcements.
 
-![Screenshot](http://baivong.github.io/announcement/screenshot.png)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Flelinhtinh%2Fannouncement.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Flelinhtinh%2Fannouncement?ref=badge_shield)
+![Screenshot](https://lelinhtinh.github.io/announcement/screenshot.png)
 
 ## Demo
 
-http://baivong.github.io/announcement/
+https://lelinhtinh.github.io/announcement/
 
 ## Installation
 
